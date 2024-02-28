@@ -22,3 +22,24 @@
     border: 2px solid teal;
     margin-top: 15px;
 }
+
+.post-enter {
+    opacity: 0;
+    transform: translateX(-350px);
+}
+
+.post-enter-active {
+    opacity: 1;
+    transform: translateX(0px);
+    transition: all 250ms ease-in;
+}
+
+.post-exit {
+    opacity: 1;
+}
+
+.post-exit-active {
+    opacity: 0;
+    transform: translateX(-350px);
+    transition: all 250ms ease-in;
+}
