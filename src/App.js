@@ -15,13 +15,19 @@ function App() {
 	])
 
 	const [title, setTitle] = useState('');
-	const bodyInputRef = useRef();
-
+	const [body, setBody] = useState('');
 
 	const addNewPost = (e) => {
-		e.preventDefault();
-		console.log(title);
-		console.log(bodyInputRef.current);
+		e.preventDefault()
+		const newPost = {
+			id: Date.now(),
+			title,
+			body
+		}
+
+		setPosts([...posts, newPost])
+		setTitle('')
+		setBody('')
 	}
 
 	return (
@@ -29,8 +35,7 @@ function App() {
 			<form>
 				{/* Controllable component */}
 				<Input value={title} onChange={e => setTitle(e.target.value)} type="text" placeholder="Post title"/>
-				{/* Uncontrollable component */}
-				<Input ref={bodyInputRef} type="text" placeholder="Post body"/>
+				<Input value={body} onChange={e => setBody(e.target.value)} type="text" placeholder="Post body"/>
 				{/* <input ref={bodyInputRef} type="text" placeholder="Post body" /> */}
 				<Button onClick={addNewPost}>Add</Button>
 			</form>
