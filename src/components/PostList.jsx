@@ -2,7 +2,7 @@ import React from 'react'
 import PostItem from './PostItem'
 
 // Destruct props to posts array on spot
-export default function PostList({posts, title}) {
+export default function PostList({posts, title, remove}) {
 
     return (
         <div>
@@ -13,7 +13,7 @@ export default function PostList({posts, title}) {
                 // Using of indexes as a key is a bad practice,
                 // because key must be static and unique,
                 // but indexes changes along with the array changes
-                posts.map((post, index) => <PostItem number={index + 1} post={post} key={post.id} />)
+                posts.map((post, index) => <PostItem remove={remove} number={index + 1} post={post} key={post.id} />)
             }
         </div>
     )

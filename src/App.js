@@ -3,8 +3,8 @@ import Counter from "./components/Counter";
 import ClassCounter from "./components/ClassCounter";
 import './styles/App.css';
 import PostList from "./components/PostList";
-import Button from "./components/UI/button/Button";
-import Input from "./components/UI/input/Input";
+import PostForm from "./components/PostForm";
+
 
 function App() {
 	const [posts, setPosts] = useState([
@@ -14,26 +14,20 @@ function App() {
 		{id: 4, title: 'Python', body: "It's like'd by students and scientists"},
 	])
 
-	const [post, setPost] = useState({title: '', body: ''});
 
-	const addNewPost = (e) => {
-		e.preventDefault()
-
-		setPosts([...posts, {...post, id: Date.now()}])
-		setPost({title: '', body: ''})
-	}
+	const createPost = (newPost) => setPosts([...posts, newPost])
+	const removePost = (post) => setPosts(posts.filter(p => p.id !== post.id))
 
 	return (
 		<div className="App">
-			<form>
-				{/* Controllable component */}
-				<Input value={post.title} onChange={e => setPost({...post, title: e.target.value})} type="text" placeholder="Post title"/>
-				<Input value={post.body} onChange={e => setPost({...post, body: e.target.value})} type="text" placeholder="Post body"/>
-				{/* <input ref={bodyInputRef} type="text" placeholder="Post body" /> */}
-				<Button onClick={addNewPost}>Add</Button>
-			</form>
-
-			<PostList posts={posts} title="Post List"/>
+			
+			<PostForm create={createPost}/>
+			{
+				// Conditional rendering
+				posts.length !== 0
+					? <PostList remove={removePost} posts={posts} title="Post List"/>
+					: <h1 style={{textAlign: 'center'}}>Posts not found</h1>
+			}
 			
 		</div>
 	);
