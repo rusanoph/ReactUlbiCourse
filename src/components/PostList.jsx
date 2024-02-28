@@ -3,6 +3,7 @@ import PostItem from './PostItem'
 
 // Destruct props to posts array on spot
 export default function PostList({posts, title}) {
+
     return (
         <div>
             <h1 style={{ textAlign: 'center' }}>

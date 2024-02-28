@@ -1,11 +1,12 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import Counter from "./components/Counter";
 import ClassCounter from "./components/ClassCounter";
 import './styles/App.css';
 import PostList from "./components/PostList";
+import Button from "./components/UI/button/Button";
+import Input from "./components/UI/input/Input";
 
 function App() {
-	const [value, setValue] = useState("Initial value")
 	const [posts, setPosts] = useState([
 		{id: 1, title: 'Javascript', body: "This is a web script programming language"},
 		{id: 2, title: 'C++', body: "This is a one of the most flexible and performance lang."},
@@ -13,24 +14,28 @@ function App() {
 		{id: 4, title: 'Python', body: "It's like'd by students and scientists"},
 	])
 
-	const [foods, setFoods] = useState([
-		{id: 1, title: 'Pasta', body: "Italy"},
-		{id: 2, title: 'Pizza', body: "Italy"},
-		{id: 3, title: 'Sushi', body: "Japan"},
-		{id: 4, title: 'Sandwitch', body: "Worldwide"},
-	])
+	const [title, setTitle] = useState('');
+	const bodyInputRef = useRef();
 
+
+	const addNewPost = (e) => {
+		e.preventDefault();
+		console.log(title);
+		console.log(bodyInputRef.current);
+	}
 
 	return (
 		<div className="App">
-			<h1>{value}</h1>
-			<input type="text" value={value} onChange={event => setValue(event.target.value)}/>
-
-			<Counter/>
-			<ClassCounter/>
+			<form>
+				{/* Controllable component */}
+				<Input value={title} onChange={e => setTitle(e.target.value)} type="text" placeholder="Post title"/>
+				{/* Uncontrollable component */}
+				<Input ref={bodyInputRef} type="text" placeholder="Post body"/>
+				{/* <input ref={bodyInputRef} type="text" placeholder="Post body" /> */}
+				<Button onClick={addNewPost}>Add</Button>
+			</form>
 
 			<PostList posts={posts} title="Post List"/>
-			<PostList posts={foods} title="Recipes List"/>
 			
 		</div>
 	);
