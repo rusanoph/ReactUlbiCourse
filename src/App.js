@@ -7,26 +7,14 @@ import PostForm from "./components/PostForm";
 import PostFilter from "./components/PostFilter";
 import Modal from "./components/UI/modal/Modal";
 import Button from "./components/UI/button/Button";
+import { usePosts } from "./hooks/usePosts";
 
 
 function App() {
-	const [posts, setPosts] = useState([
-		{ id: 1, title: 'Javascript', body: "This is a web script programming language" },
-		{ id: 2, title: 'C++', body: "This is a one of the most flexible and performance lang." },
-		{ id: 3, title: 'Java', body: "Generaly uses for enterprise programming" },
-		{ id: 4, title: 'Python', body: "It's like'd by students and scientists" },
-	])
-
+	const [posts, setPosts] = useState([])
 	const [filter, setFilter] = useState({ sort: '', query: '' });
 	const [modal, setModal] = useState(false);
-
-	const sortedPosts = useMemo(() => {
-		return filter.sort ? [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort])) : posts;
-	}, [filter.sort, posts]);
-
-	const sortedAndSearchedPosts = useMemo(() => {
-		return sortedPosts.filter(post => post.title.toLowerCase().includes(filter.query.toLowerCase()))
-	}, [filter.query, sortedPosts]);
+	const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 
 	const createPost = (newPost) => {
 		setPosts([...posts, newPost])
@@ -37,7 +25,7 @@ function App() {
 	return (
 		<div className="App">
 
-			<Button style={{marginTop: '20px'}} onClick={() => setModal(true)}>Create Post</Button>
+			<Button style={{margin: '5px 0'}} onClick={() => setModal(true)}>Create Post</Button>
 
 			<Modal visible={modal} setVisible={setModal}>
 				<PostForm create={createPost} />
