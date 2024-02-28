@@ -14,28 +14,21 @@ function App() {
 		{id: 4, title: 'Python', body: "It's like'd by students and scientists"},
 	])
 
-	const [title, setTitle] = useState('');
-	const [body, setBody] = useState('');
+	const [post, setPost] = useState({title: '', body: ''});
 
 	const addNewPost = (e) => {
 		e.preventDefault()
-		const newPost = {
-			id: Date.now(),
-			title,
-			body
-		}
 
-		setPosts([...posts, newPost])
-		setTitle('')
-		setBody('')
+		setPosts([...posts, {...post, id: Date.now()}])
+		setPost({title: '', body: ''})
 	}
 
 	return (
 		<div className="App">
 			<form>
 				{/* Controllable component */}
-				<Input value={title} onChange={e => setTitle(e.target.value)} type="text" placeholder="Post title"/>
-				<Input value={body} onChange={e => setBody(e.target.value)} type="text" placeholder="Post body"/>
+				<Input value={post.title} onChange={e => setPost({...post, title: e.target.value})} type="text" placeholder="Post title"/>
+				<Input value={post.body} onChange={e => setPost({...post, body: e.target.value})} type="text" placeholder="Post body"/>
 				{/* <input ref={bodyInputRef} type="text" placeholder="Post body" /> */}
 				<Button onClick={addNewPost}>Add</Button>
 			</form>
