@@ -12,6 +12,7 @@ import { useFetching } from "./../hooks/useFetching";
 import { getPageCount, getPagesArray } from "./../utils/pages";
 import Pagination from "./../components/UI/pagination/Pagination";
 import { useObserver } from "../hooks/useObserver";
+import Select from "../components/UI/select/Select";
 
 
 
@@ -20,7 +21,7 @@ function Posts() {
 	const [filter, setFilter] = useState({ sort: '', query: '' });
 	const [modal, setModal] = useState(false);
 	const [totalPages, setTotalPages] = useState(0);
-	const [limit, setLimit] = useState(16);
+	const [limit, setLimit] = useState(5);
 	const [page, setPage] = useState(1);
 	const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 	// If you don't want to lose some object while render call, 
@@ -42,7 +43,7 @@ function Posts() {
 
 	useEffect(() => { 
 		fetchPosts(limit, page);
-	}, [page]);
+	}, [page, limit]);
 
 	const createPost = (newPost) => {
 		setPosts([...posts, newPost])
@@ -65,6 +66,18 @@ function Posts() {
 			</Modal>
 
 			<PostFilter filter={filter} setFilter={setFilter} />
+			<Select
+				value={limit}
+				onChange={value => setLimit(value)}
+				defaultValue="Elements on page..."
+				options={[
+					{value: "5", name: "5"},
+					{value: "10", name: "10"},
+					{value: "25", name: "25"},
+					{value: "-1", name: "Show all"},
+				]}			
+
+			/>
 			
 			<hr style={{ margin: '15px 0' }} />
 
