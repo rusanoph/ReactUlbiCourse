@@ -8,6 +8,7 @@ export const useSortedPosts = (posts, sort) => {
     return sortedPosts;
 }
 
+// Search Query & Title/Body Sort
 export const usePosts = (posts, sort, query) => {
     const sortedPosts = useSortedPosts(posts, sort);
 
