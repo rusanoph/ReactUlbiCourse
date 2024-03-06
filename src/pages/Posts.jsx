@@ -11,6 +11,7 @@ import Loader from "./../components/UI/Loader/Loader";
 import { useFetching } from "./../hooks/useFetching";
 import { getPageCount, getPagesArray } from "./../utils/pages";
 import Pagination from "./../components/UI/pagination/Pagination";
+import { useObserver } from "../hooks/useObserver";
 
 
 
@@ -22,19 +23,26 @@ function Posts() {
 	const [limit, setLimit] = useState(16);
 	const [page, setPage] = useState(1);
 	const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
-
+	// If you don't want to lose some object while render call, 
+	// you can save objects by using useRef
+	const lastElement = useRef();
 
 	const [fetchPosts, isPostLoading, postError] = useFetching(async (limit, page) => {
 		const response = await PostService.getAll(limit, page);
-		setPosts(response.data);
+		setPosts([...posts, ...response.data]);
 
 		const totalCount = response.headers['x-total-count'];
 		setTotalPages(getPageCount(totalCount, limit));
 	})
 
+	useObserver(lastElement, page < totalPages, isPostLoading, () => {
+		setPage(page + 1);
+	})
+	
+
 	useEffect(() => { 
 		fetchPosts(limit, page);
-	}, []);
+	}, [page]);
 
 	const createPost = (newPost) => {
 		setPosts([...posts, newPost])
@@ -64,12 +72,16 @@ function Posts() {
 				<h1>Caused error ${postError}</h1>
 			}
 
-			{isPostLoading
-				? <div style={{display: 'flex', justifyContent: 'center', marginTop: 50}}><Loader /></div>
-				: <PostList remove={removePost} posts={sortedAndSearchedPosts} title="Post List" /> 
+			
+			<PostList remove={removePost} posts={sortedAndSearchedPosts} title="Post List" /> 
+			<div ref={lastElement} style={{height: 20, background: 'transparent'}}/>
+			{isPostLoading &&
+				<div style={{display: 'flex', justifyContent: 'center', marginTop: 50}}><Loader /></div>
 			}
 
-			<Pagination page={page} changePage={changePage} totalPages={totalPages} />
+
+
+			{/* <Pagination page={page} changePage={changePage} totalPages={totalPages} /> */}
 
 		</div>
 	);
